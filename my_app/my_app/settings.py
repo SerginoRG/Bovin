@@ -33,8 +33,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # ou un autre fournisseur SMTP
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'serginorakotomalala@gmail.com'
-EMAIL_HOST_PASSWORD = 'hjkc zrjx ckhj rpji'  # ou un mot de passe d'application si 2FA est activée
+EMAIL_HOST_USER = 'ton adress email'
+EMAIL_HOST_PASSWORD = 'ton mot de passe'  # ou un mot de passe d'application si 2FA est activée
 
 
 
@@ -116,9 +116,9 @@ WSGI_APPLICATION = 'my_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bovin',  # Remplace par le nom de ta base de données
-        'USER': 'postgres',  # Remplace par ton utilisateur PostgreSQL
-        'PASSWORD': 'karate',  # Remplace par ton mot de passe PostgreSQL
+        'NAME': 'ton base de données',  # Remplace par le nom de ta base de données
+        'USER': 'ton utilisateur PostgreSQL',  # Remplace par ton utilisateur PostgreSQL
+        'PASSWORD': 'ton mot de passe PostgreSQL',  # Remplace par ton mot de passe PostgreSQL
         'HOST': 'localhost',  # Ou l'adresse IP de ton serveur PostgreSQL
         'PORT': '5432',  # Port par défaut de PostgreSQL
     }
