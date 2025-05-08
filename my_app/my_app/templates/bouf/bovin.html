@@ -1,0 +1,56 @@
+{% extends 'bouf/menu.html' %}
+
+{% block title %}Gestion d'un ferme Bovin{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="dashboard-cards">
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_clients|default:"0" }}</div>
+            <div class="card-name">Nombre de Clients</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_commandes|default:"0" }}</div>
+            <div class="card-name">Nombre de Commandes</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-box"></i>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ total_stock|default:"0" }}</div>
+            <div class="card-name">Stock Aliment (kg)</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-warehouse"></i>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_troupeaux|default:"0" }}</div>
+            <div class="card-name">Nombre de Troupeaux</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-cow"></i>
+        </div>
+    </div>
+</div>
+
+<div class="images-container">
+    <img src="{% static 'images/barea_1.jpeg' %}" alt="Image 1">
+    <img src="{% static 'images/barea_3.jpeg' %}" alt="Image 2">
+</div>
+
+{% endblock %}

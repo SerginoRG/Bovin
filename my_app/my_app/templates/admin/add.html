@@ -1,0 +1,195 @@
+{% extends 'admin/nav.html' %}
+
+{% block title %}Ajouter un Login{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<!-- Liens CSS -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Style local -->
+<style>
+    .password-container {
+        position: relative;
+    }
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+    }
+    .password-strength {
+        margin-top: 5px;
+        height: 4px;
+        background: #eee;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    .strength-bar {
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s ease, background 0.3s ease;
+    }
+</style>
+
+<!-- SweetAlert pour les messages Django -->
+{% if messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const messages = [
+            {% for message in messages %}
+                {
+                    icon: "{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}info{% endif %}",
+                    title: "{{ message.tags|capfirst }}",
+                    text: "{{ message|escapejs }}"
+                },
+            {% endfor %}
+        ];
+
+        function showMessage(index) {
+            if (index < messages.length) {
+                Swal.fire({
+                    icon: messages[index].icon,
+                    title: messages[index].title,
+                    text: messages[index].text,
+                    confirmButtonColor: '#4361ee',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    showMessage(index + 1);
+                });
+            }
+        }
+
+        showMessage(0);
+    });
+</script>
+{% endif %}
+
+<!-- Formulaire d'ajout -->
+<div class="container">
+    <header>Ajouter un Utilisateur</header>
+    <div class="souligne"></div>
+
+    <form action="{% url 'add_login' %}" method="post" id="loginForm">
+        {% csrf_token %}
+
+        <div class="fields">
+            <div class="input-field">
+                <label for="nom">Nom complet</label>
+                <input type="text" id="nom" name="nom" placeholder="Entrez le nom complet" required>
+            </div>
+
+            <div class="input-field">
+                <label for="identifiant">Nom d'utilisateur</label>
+                <input type="text" id="identifiant" name="identifiant" placeholder="Entrez un identifiant unique" required>
+            </div>
+
+            <div class="input-field">
+                <label for="role">Rôle</label>
+                <select id="role" name="role" required>
+                    <option value="">-- Sélectionnez un rôle --</option>
+                    <option value="user">Utilisateur Standard</option>
+                    <option value="admin">Administrateur</option>
+                    <option value="gestion_animaux">Gestionnaire des Animaux</option>
+                    <option value="gestion_alimentation">Responsable Alimentation</option>
+                    <option value="gestion_sanitaire">Vétérinaire</option>
+                    <option value="gestion_production">Technicien de Production</option>
+                    <option value="gestion_ventes">Responsable Commercial</option>
+                </select>
+            </div>
+
+            <div class="input-field password-container">
+                <label for="mot_de_passe">Mot de passe</label>
+                <input type="password" id="mot_de_passe" name="mot_de_passe" placeholder="Mot de passe (min 8 caractères)" required>
+                <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                <div class="password-strength">
+                    <div class="strength-bar" id="strengthBar"></div>
+                </div>
+            </div>
+
+            <div class="input-field password-container">
+                <label for="verification_mot_de_passe">Confirmation Mot de passe</label>
+                <input type="password" id="verification_mot_de_passe" name="verification_mot_de_passe" placeholder="Confirmez le mot de passe" required>
+                <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Enregistrer</span>
+                <i class="fas fa-save"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Affichage/masquage du mot de passe
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('mot_de_passe');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+        const confirmPasswordInput = document.getElementById('verification_mot_de_passe');
+        const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPasswordInput.setAttribute('type', type);
+        this.classList.toggle('fa-eye-slash');
+    });
+
+    // Barre de force du mot de passe
+    document.getElementById('mot_de_passe').addEventListener('input', function() {
+        const strengthBar = document.getElementById('strengthBar');
+        const password = this.value;
+        let strength = 0;
+
+        if (password.length >= 8) strength += 1;
+        if (/[a-z]/.test(password)) strength += 1;
+        if (/[A-Z]/.test(password)) strength += 1;
+        if (/[0-9]/.test(password)) strength += 1;
+        if (/[$@#&!]/.test(password)) strength += 1;
+
+        const width = strength * 20;
+        let color = '#ff4d4d';
+        if (strength >= 4) color = '#4CAF50';
+        else if (strength >= 2) color = '#ffcc00';
+
+        strengthBar.style.width = width + '%';
+        strengthBar.style.background = color;
+    });
+
+    // Validation avant envoi du formulaire
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const password = document.getElementById('mot_de_passe').value;
+        const confirmPassword = document.getElementById('verification_mot_de_passe').value;
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Les mots de passe ne correspondent pas.',
+                confirmButtonColor: '#4361ee'
+            });
+        } else if (password.length < 8) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Le mot de passe doit contenir au moins 8 caractères.',
+                confirmButtonColor: '#4361ee'
+            });
+        }
+    });
+</script>
+
+{% endblock %}

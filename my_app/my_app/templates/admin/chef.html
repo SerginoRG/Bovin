@@ -1,0 +1,250 @@
+{% extends 'admin/nav.html' %}
+
+{% block title %}Gestion Chef{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<div class="dashboard-cards">
+
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_client|default:"0" }}</div>
+            <div class="card-name">Nombre de Clients</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-users"></i>
+        </div>
+    </div>
+        
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_commande|default:"0" }}</div>
+            <div class="card-name">Nombre de Commandes</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-box"></i>
+        </div>
+    </div>
+    
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_user|default:"0" }}</div>
+            <div class="card-name">Nombre de User</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-regular fa-circle-user"></i>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-content">
+            <div class="card-numbers">{{ nb_indivindu|default:"0" }}</div>
+            <div class="card-name">Nombre d'Individu</div>
+        </div>
+        <div class="card-icon">
+            <i class="fa-solid fa-cow"></i>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="chart-container">
+    <div class="chart-wrapper">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Dépenses par mois</h3>
+             
+            </div>
+            <div class="chart-body">
+                <canvas id="depenseChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Recettes par mois</h3>
+            </div>
+            <div class="chart-body">
+                <canvas id="recetteChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chart-container {
+        margin: 30px 0;
+    }
+    
+    .chart-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    .chart-card {
+        flex: 1 1 45%;
+        min-width: 300px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .chart-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+    
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+        color: white;
+    }
+    
+    .chart-title {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .chart-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    
+    
+    .chart-body {
+        /* padding: 2px; */
+        height: 300px;
+    }
+    
+    @media (max-width: 768px) {
+        .chart-card {
+            flex: 1 1 100%;
+        }
+    }
+</style>
+
+<script>
+    // Configuration commune des graphiques
+    const chartConfig = {
+        type: 'bar',
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 12,
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        },
+                        padding: 20,
+                        usePointStyle: true,
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 12
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y.toLocaleString()} Ar`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString() + ' Ar';
+                        },
+                        font: {
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                        }
+                    }
+                }
+            },
+            elements: {
+                bar: {
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }
+            }
+        }
+    };
+
+    // Graphique des dépenses
+   // Graphique des dépenses
+   new Chart(
+        document.getElementById('depenseChart'),
+        {
+            ...chartConfig,
+            data: {
+                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                        'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                datasets: [{
+                    label: 'Dépenses',
+                    data: {{ monthly_expenses|safe }},
+                    backgroundColor: 'rgba(239, 71, 111, 0.8)',
+                    borderColor: 'rgba(239, 71, 111, 1)',
+                    borderWidth: 1
+                }]
+            }
+        }
+    );
+
+    // Graphique des recettes
+    // Graphique des recettes
+    new Chart(
+        document.getElementById('recetteChart'),
+        {
+            ...chartConfig,
+            data: {
+                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                        'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                datasets: [{
+                    label: 'Recettes',
+                    data: {{ monthly_revenue|safe }},
+                    backgroundColor: 'rgba(6, 214, 160, 0.8)',
+                    borderColor: 'rgba(6, 214, 160, 1)',
+                    borderWidth: 1
+                }]
+            }
+        }
+    );
+</script>
+{% endblock %}

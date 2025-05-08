@@ -1,0 +1,72 @@
+{% extends 'bouf/menu.html' %}
+
+{% block title %}Gestion d'un ferme Bovin{% endblock %}
+
+{% block content %}
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+  
+    
+
+    
+
+<div class="container">
+    <header>Formulaire de modification Troupeau</header>
+    <div class="souligne"></div>
+    
+    <form action="{% url 'modifier_troupeau' troupeau.id_troupeau %}" method="post">
+
+        <div class="fields">
+            
+            {% csrf_token %}
+
+
+            <div class="input-field">
+                <label for="nom">Nom du troupeau</label>
+                <input type="text" id="nom" name="nom" value="{{ troupeau.nom }}" placeholder="Entrez le Nom du troupeau" required>
+            </div>
+
+            <div class="input-field">
+                <label for="race">Race</label>
+                <input type="text" id="race" name="race" value="{{ troupeau.race }}" placeholder="Entrez le Race" required>
+            </div>
+
+            
+            <div class="input-field">
+                <label for="date_creation">Date de creation</label>
+                <input type="date" id="date_creation"  value="{{ troupeau.date_creation|date:'Y-m-d' }}" name="date_creation" required>
+            </div>
+
+            
+
+
+            <div class="input-field">
+                <label for="type">Type</label>
+                <select id="type" name="type" required>
+                    <option value="">Sélectionnez</option>
+                    <option value="laitier" {% if troupeau.type == "laitier" %}selected{% endif %}>Laitier</option>
+                    <option value="viande" {% if troupeau.type == "viande" %}selected{% endif %}>Viande</option>
+                    <option value="mixte" {% if troupeau.type == "mixte" %}selected{% endif %}>Mixte</option>
+                </select>
+            </div>
+
+
+        </div>
+
+        <div class="buttons">
+            <a href="{% url 'troupeautableau' %}" class="btnRetour">Retour  <i class="fa-solid fa-rotate-left"></i></a>
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Valider</span>
+                <i class="fa-regular fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+
+    
+</div>
+
+
+
+{% endblock %}

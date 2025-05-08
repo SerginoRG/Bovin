@@ -1,0 +1,41 @@
+{% extends 'bouf/menu.html' %}
+
+{% block title %}Modifier une maladie{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+
+<div class="container">
+    <header>Modifier la maladie: {{ maladie.nom_maladie }}</header>
+    <div class="souligne"></div>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="fields">
+            <div class="input-field">
+                <label for="id_nom_maladie">Nom de la maladie</label>
+                {{ form.nom_maladie }}
+                {{ form.nom_maladie.errors }}
+            </div>
+
+            <div class="input-field">
+                <label for="id_description_maladie">Description</label>
+                {{ form.description_maladie }}
+                {{ form.description_maladie.errors }}
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="{% url 'maladietableau' %}" class="btnRetour">Retour <i class="fa-solid fa-rotate-left"></i></a>
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Enregistrer</span>
+                <i class="fa-regular fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

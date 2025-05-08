@@ -1,0 +1,97 @@
+{% extends 'bouf/menu.html' %}
+
+{% block title %}Modifier une ration{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container">
+    <header>Modifier une ration</header>
+    <div class="souligne"></div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="fields">
+            <div class="input-field">
+                <label for="id_troupeau_id">Troupeau</label>
+                <select name="id_troupeau_id" id="id_troupeau_id" required>
+                    {% for troupeau in troupeaux %}
+                        <option value="{{ troupeau.id_troupeau }}" 
+                            {% if troupeau.id_troupeau == ration.id_troupeau.id_troupeau %}selected{% endif %}>
+                            {{ troupeau.nom }} ({{ troupeau.id_troupeau }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-field">
+                <label for="id_aliment_id">Aliment</label>
+                <select name="id_aliment_id" id="id_aliment_id" required>
+                    {% for aliment in aliments %}
+                        <option value="{{ aliment.id_aliment }}" 
+                            data-stock="{{ aliment.stock_aliment }}"
+                            {% if aliment.id_aliment == ration.id_aliment.id_aliment %}selected{% endif %}>
+                            {{ aliment.nom_aliment }} (Stock: {{ aliment.stock_aliment }} kg)
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-field">
+                <label for="quantite_aliment">Quantité (kg)</label>
+                <input type="number" id="quantite_aliment" name="quantite_aliment" 
+                       value="{{ ration.quantite_aliment }}" min="1" step="1" required>
+                <small id="stock-disponible" style="color: #666;"></small>
+            </div>
+
+            <div class="input-field">
+                <label for="date_ration">Date de distribution</label>
+                <input type="date" id="date_ration" name="date_ration" 
+                       value="{{ ration.date_ration|date:'Y-m-d' }}" required>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="{% url 'rationtableau' %}" class="btnRetour">
+                <i class="fa-solid fa-rotate-left"></i> Annuler
+            </a>
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Enregistrer</span>
+                <i class="fa-regular fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Afficher les messages
+        {% for message in messages %}
+            Swal.fire({
+                icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}",
+                title: "{{ message.tags|capfirst }}",
+                text: "{{ message }}",
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        {% endfor %}
+
+        // Gestion du stock disponible
+        const alimentSelect = document.getElementById('id_aliment_id');
+        const updateStockInfo = () => {
+            const selectedOption = alimentSelect.options[alimentSelect.selectedIndex];
+            const stock = selectedOption.getAttribute('data-stock');
+            document.getElementById('stock-disponible').textContent = `Stock disponible: ${stock} kg`;
+        };
+
+        alimentSelect.addEventListener('change', updateStockInfo);
+        updateStockInfo(); // Initialiser au chargement
+    });
+</script>
+
+{% endblock %}

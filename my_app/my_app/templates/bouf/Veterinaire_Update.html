@@ -1,0 +1,100 @@
+{% extends 'bouf/menu.html' %}
+
+{% block title %}Modifier un Vétérinaire{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Afficher les messages Django avec SweetAlert
+    document.addEventListener('DOMContentLoaded', function() {
+        {% for message in messages %}
+            Swal.fire({
+                title: '{{ message.tags|capfirst }}',
+                text: '{{ message }}',
+                icon: '{% if message.tags == "success" %}success{% elif message.tags == "error" %}error{% else %}info{% endif %}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                {% if message.tags == 'success' %}
+                    window.location.href = "{% url 'veterinairetableau' %}";
+                {% endif %}
+            });
+        {% endfor %}
+
+        // Validation du formulaire
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const nom = document.getElementById('nom_veterinaire').value.trim();
+                const prenom = document.getElementById('prenom_veterinaire').value.trim();
+                const telephone = document.getElementById('telephone_veterinaire').value.trim();
+                
+                if (!nom || !prenom || !telephone) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Champs obligatoires',
+                        text: 'Veuillez remplir tous les champs marqués d\'un astérisque (*)',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            });
+        }
+    });
+</script>
+
+<div class="container">
+    <header>
+        Modification du Vétérinaire : {{ veterinaire.nom_veterinaire }} {{ veterinaire.prenom_veterinaire }}
+    </header>
+    <div class="souligne"></div>
+
+    <form action="{% url 'veterinaireupdate' veterinaire.id_veterinaire %}" method="post">
+        {% csrf_token %}
+        <div class="fields">
+            <div class="input-field">
+                <label for="nom_veterinaire">Nom <span class="required">*</span></label>
+                <input type="text" id="nom_veterinaire" name="nom_veterinaire" 
+                       placeholder="Nom du vétérinaire" 
+                       value="{{ veterinaire.nom_veterinaire }}" required>
+            </div>
+
+            <div class="input-field">
+                <label for="prenom_veterinaire">Prénom <span class="required">*</span></label>
+                <input type="text" id="prenom_veterinaire" name="prenom_veterinaire" 
+                       placeholder="Prénom du vétérinaire" 
+                       value="{{ veterinaire.prenom_veterinaire }}" required>
+            </div>
+
+            <div class="input-field">
+                <label for="telephone_veterinaire">Téléphone <span class="required">*</span></label>
+                <input type="text" id="telephone_veterinaire" name="telephone_veterinaire" 
+                       placeholder="Numéro de téléphone" 
+                       value="{{ veterinaire.telephone_veterinaire }}" required>
+            </div>
+
+            <div class="input-field">
+                <label for="adresse_veterinaire">Adresse</label>
+                <input type="text" id="adresse_veterinaire" name="adresse_veterinaire" 
+                       placeholder="Adresse complète" 
+                       value="{{ veterinaire.adresse_veterinaire }}">
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="{% url 'veterinairetableau' %}" class="btnRetour">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Mettre à jour</span>
+                <i class="fas fa-save"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

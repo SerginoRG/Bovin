@@ -1,0 +1,41 @@
+{% extends 'bouf/menu.html' %}
+{% load static %}
+
+{% block title %}Modifier Aliment{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+
+<div class="container">
+    <header>Formulaire de modification d'un aliment</header>
+    <div class="souligne"></div>
+
+    <form method="post" action="{% url 'modifier_aliment' aliment.id_aliment %}">
+
+        {% csrf_token %}
+        <div class="fields">
+
+            <div class="input-field">
+                <label for="nom_aliment">Nom</label>
+                <input type="text" name="nom_aliment" value="{{ aliment.nom_aliment }}" required>
+            </div>
+
+            <div class="input-field">
+                <label for="type_aliment">Type</label>
+                <input type="text" name="type_aliment" value="{{ aliment.type_aliment }}" required>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+            <a href="{% url 'aliment_tableau' %}" class="btnRetour">Retour<i class="fa-solid fa-rotate-left"></i></a>
+           
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Valider</span>
+                <i class="fa-regular fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

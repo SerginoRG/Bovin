@@ -1,0 +1,269 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top: 60px; /* Ajustez cette valeur en fonction de la hauteur de votre barre de navigation */
+}
+
+/* ... (Vos styles de barre de navigation existants) ... */
+
+.dashboard-cards {
+    position: relative;
+    width: 90%;
+    padding: 20px;
+    margin-left: 50px;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 30px;
+}
+
+.dashboard-card {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alignement vertical */
+    cursor: pointer;
+    padding: 20px; /* Réduction du padding */
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transitions */
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-numbers {
+    font-weight: 500;
+    font-size: 2rem; /* Réduction de la taille de la police */
+    color: blue;
+    margin-bottom: 5px; /* Ajout de marge */
+}
+
+.card-name {
+    color: black;
+    font-size: 1rem;
+}
+
+.card-icon {
+    font-size: 3rem; /* Réduction de la taille de l'icône */
+    color: black;
+}
+
+.dashboard-card:hover {
+    background: blue;
+    transform: translateY(-5px); /* Légère élévation */
+}
+
+.dashboard-card:hover .card-numbers,
+.dashboard-card:hover .card-name,
+.dashboard-card:hover .card-icon {
+    color: white;
+}
+
+
+
+
+
+
+
+
+.images-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap; /* Permet aux images de passer à la ligne sur les petits écrans */
+}
+
+.images-container img {
+    max-width: 20%;
+    height: auto;
+    border-radius: 5%;
+    margin: 10px; /* Ajout de marge pour l'espacement */
+}
+
+
+.navbar {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed; /* Rendre la barre de navigation fixe */
+    top: 0; /* La positionner en haut de la page */
+    left: 0; /* La positionner à gauche de la page */
+    width: 97%; /* Occuper toute la largeur de la page */
+    z-index: 1000; /* Assurer qu'elle soit au-dessus des autres éléments */
+}
+
+/* ... (Vos autres styles CSS) ... */
+/* .navbar {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+} */
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px; /* Ajustez la taille du logo */
+    margin-right: 10px;
+    border-radius: 20%;
+}
+
+.ferme-nom {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-link::after {
+    content: '';
+    display: inline-block;
+    margin-left: 5px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    vertical-align: middle;
+}
+
+.nav-item:not(:has(.nav-submenu)) .nav-link::after {
+    display: none;
+}
+
+.nav-submenu {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    list-style: none;
+    padding: 5px 0;
+    min-width: 180px;
+    z-index: 1;
+    border: 1px solid #555;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.nav-item:hover .nav-submenu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-submenu-link {
+    display: block;
+    padding: 8px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.nav-submenu-link:hover {
+    background-color: #555;
+}
+
+.hamburger {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .navbar-left {
+        display: none; /* Cache le logo et le nom de la ferme en mobile */
+    }
+
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        background-color: #333;
+        width: 100%;
+        top: 50px;
+        left: 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-list.show {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .nav-submenu {
+        position: static;
+        display: none;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    .nav-item:hover .nav-submenu {
+        display: block;
+    }
+
+    .nav-submenu-link {
+        padding-left: 30px;
+    }
+}
+    /* Responsive Styles pour le Tableau de Bord */
+    @media screen and (max-width: 768px) {
+        .dashboard-item {
+            width: 90%; /* Occupe toute la largeur sur les petits écrans */
+            box-sizing: border-box; /* Inclut la bordure et le padding dans la largeur */
+        }
+        
+        .images-container img {
+            max-width: 80%; /* Ajuste la taille des images pour les petits écrans */
+        }
+    }
+            @media screen and (max-width: 768px) {
+                .dashboard-item {
+                    width: 80%;
+                    box-sizing: border-box;
+                }
+            }
+
+            /* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur les tablettes */
+        grid-gap: 20px;
+        margin-left: 0px;
+    }
+}
+

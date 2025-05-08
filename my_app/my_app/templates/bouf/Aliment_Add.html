@@ -1,0 +1,66 @@
+{% extends 'bouf/menu.html' %}
+
+{% block title %}Gestion d'un ferme Bovin{% endblock %}
+
+{% block content %}
+
+
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/formulair.css' %}">
+    
+
+    
+
+
+<div class="container">
+    <header>Formulaire d'ajouter Aliment</header>
+    <div class="souligne"></div>
+    
+    <form action="{% url 'ajouter_aliment' %}" method="post">
+
+        {% csrf_token %}
+    
+        <div class="fields">
+
+            <div class="input-field">
+                <label for="id_aliment">Id Aliment</label>
+                <input type="text" id="id_aliment" name="id_aliment" placeholder="Entrez le id du aliment" required>
+            </div>
+
+            <div class="input-field">
+                <label for="nom_aliment">Nom du aliment</label>
+                <input type="text" id="nom_aliment" name="nom_aliment" placeholder="Entrez le Nom du Aliment" required>
+            </div>
+
+            <div class="input-field">
+                <label for="type_aliment">Type</label>
+                <input type="text" id="type_aliment" name="type_aliment" placeholder="Entrez le type" required>
+            </div>
+
+          
+
+            
+         
+
+
+        </div>
+
+        <div class="buttons">
+
+
+            <a href="{% url 'aliment_tableau' %}" class="btnRetour">Retour  <i class="fa-solid fa-rotate-left"></i></a>
+
+
+            <button type="submit" class="nextBtn">
+                <span class="btnText">Valider</span>
+                <i class="fa-regular fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+
+
+
+{% endblock %}

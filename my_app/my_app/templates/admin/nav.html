@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>{% block title %}Menu{% endblock %}</title>
+   
+</head>
+<body>
+
+    
+        
+
+            <!-- Menu debut -->
+
+            <nav class="navbar">
+
+                <div class="navbar-left">
+                    {% load static %}
+                    <img src="{% static 'images/bovin_4.jpeg' %}" alt="Logo de la ferme" class="logo">
+                    <span class="ferme-nom">Be-Trafo</span>
+                </div>
+        
+                <ul class="nav-list" id="nav-list">
+                    <li class="nav-item"><a href="{% url 'chef' %}" class="nav-link">Accuiel</a></li>
+        
+                    <li class="nav-item">
+                        <a  class="nav-link">Controleur User</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'affiche' %}" class="nav-submenu-link">Afficher</a></li>
+                            <li><a href="{% url 'addchef' %}" class="nav-submenu-link">Add</a></li>
+                        </ul>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a href="#" class="nav-link">Alimentation</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'aliment_tableau' %}" class="nav-submenu-link">Aliment</a></li>
+                            <li><a href="{% url 'stocktableau' %}" class="nav-submenu-link">Stock Aliment</a></li>
+                            <li><a href="{% url 'rationtableau' %}" class="nav-submenu-link">Ration Alimentaire</a></li>
+                        </ul>
+                    </li> -->
+                   
+                   
+                   
+
+                    <li class="nav-item"><a href="/" class="nav-link">Deconnexion</a></li>
+                </ul>
+                <span class="hamburger" onclick="toggleMenu()">&#9776;</span>
+            </nav>
+
+
+<!-- Menu fin -->
+
+      
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+
+
+    <script>
+         function toggleMenu() {
+            document.getElementById("nav-list").classList.toggle("show");
+        }
+    </script>
+</body>
+</html>

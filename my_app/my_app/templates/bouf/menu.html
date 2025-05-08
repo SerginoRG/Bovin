@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>{% block title %}Menu{% endblock %}</title>
+   
+</head>
+<body>
+
+    
+        
+
+            <!-- Menu debut -->
+
+            <nav class="navbar">
+
+                <div class="navbar-left">
+                    {% load static %}
+                    <img src="{% static 'images/bovin_4.jpeg' %}" alt="Logo de la ferme" class="logo">
+                    <span class="ferme-nom">Be-Trafo</span>
+                </div>
+        
+                <ul class="nav-list" id="nav-list">
+
+                    {% if user.is_authenticated %}
+                        <div class="user-info">
+                            Connecté en tant que : <strong>{{ user.username }}</strong> ({{ user.role }})
+                        </div>
+                    {% endif %}
+
+
+                    <li class="nav-item"><a href="{% url 'bovin' %}" class="nav-link">Accuiel</a></li>
+        
+                    <li class="nav-item">
+                        <a  class="nav-link">Animaux</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'troupeautableau' %}" class="nav-submenu-link">Troupeau</a></li>
+                            <li><a href="{% url 'individutableau' %}" class="nav-submenu-link">Individu</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- {% if user.is_authenticated %}
+                        {% if  user.role == 'gestion_animaux' %}
+                            <li class="nav-item">
+                                <a class="nav-link">Animaux</a>
+                                <ul class="nav-submenu">
+                                    <li><a href="{% url 'troupeautableau' %}" class="nav-submenu-link">Troupeau</a></li>
+                                    <li><a href="{% url 'individutableau' %}" class="nav-submenu-link">Individu</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endif %} -->
+
+
+
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Alimentation</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'aliment_tableau' %}" class="nav-submenu-link">Aliment</a></li>
+                            <li><a href="{% url 'stocktableau' %}" class="nav-submenu-link">Stock Aliment</a></li>
+                            <li><a href="{% url 'rationtableau' %}" class="nav-submenu-link">Ration Alimentaire</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Gestion Sanitaire</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'maladietableau' %}" class="nav-submenu-link">Maladie</a></li>
+                            <li><a href="{% url 'veterinairetableau' %}" class="nav-submenu-link">Vétérinaire</a></li>
+                            <li><a href="{% url 'vaccintableau' %}" class="nav-submenu-link">Vaccin</a></li>
+                            <li><a href="{% url 'traitementtableau' %}" class="nav-submenu-link">Traitement</a></li>
+                        </ul>
+                    </li>
+                   
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Production</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'reproductiontableau' %}" class="nav-submenu-link">Reproduction</a></li>
+                            <li><a href="{% url 'productiontableau' %}" class="nav-submenu-link">Production</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Ventes</a>
+                        <ul class="nav-submenu">
+                            <li><a href="{% url 'clienttableau' %}" class="nav-submenu-link">Client</a></li>
+                            <!-- <li><a href="{% url 'commandetableau' %}" class="nav-submenu-link">Commande</a></li> -->
+                            <li><a href="{% url 'commande_detail' %}" class="nav-submenu-link">Commande</a></li>
+                            <li><a href="{% url 'ajouter_ligne_commande' %}" class="nav-submenu-link">Par Ligne</a></li>
+                            
+                            <li><a href="{% url 'ligne_tableau' %}" class="nav-submenu-link">Tableau Ligne</a></li>
+                            <li><a href="{% url 'tableau_commande_detail' %}" class="nav-submenu-link">Tableau Commande</a></li>
+                            <li><a href="{% url 'produittableau' %}" class="nav-submenu-link">Produit</a></li>
+                            <li><a href="{% url 'paiementtableau' %}" class="nav-submenu-link">Payement</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li class="nav-item"><a href="/" class="nav-link">Deconnexion</a></li>
+                </ul>
+                <span class="hamburger" onclick="toggleMenu()">&#9776;</span>
+            </nav>
+
+
+<!-- Menu fin -->
+
+      
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+
+
+    <script>
+         function toggleMenu() {
+            document.getElementById("nav-list").classList.toggle("show");
+        }
+    </script>
+</body>
+</html>
